@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS planned_events_tab (
+
+id UUID PRIMARY KEY,
+voyage_id INT NOT NULL,
+vessel_id INT NOT NULL,
+from_date TIMESTAMP NOT NULL,
+to_date TIMESTAMP NOT NULL,
+event TEXT NOT NULL
+);
+
