@@ -3,4 +3,4 @@ name: postgresql
 description: A Helm chart for PostgreSQL
 type: application
 version: 0.1.0
-appVersion: 16
+appVersion: "17"
