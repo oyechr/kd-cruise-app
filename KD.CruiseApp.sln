@@ -13,6 +13,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KD.Cruise.Tests", "tests\KD.Cruise.Tests\KD.Cruise.Tests.csproj", "{C1EC390F-F4B4-43C5-8214-3E3A2B698F53}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Charts", "Charts", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{A1F300DD-1B82-4C22-A1BD-BA3EE171937C}"
+	ProjectSection(SolutionItems) = preProject
+		charts\postgresql\templates\configmap.yaml = charts\postgresql\templates\configmap.yaml
+		charts\postgresql\templates\deployment.yaml = charts\postgresql\templates\deployment.yaml
+		charts\postgresql\templates\service.yaml = charts\postgresql\templates\service.yaml
+		charts\postgresql\templates\_helpers.tpl = charts\postgresql\templates\_helpers.tpl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postgresql", "postgresql", "{37E9690F-84BC-436B-B8B9-6B799B3EE2B2}"
+	ProjectSection(SolutionItems) = preProject
+		charts\postgresql\Chart.yaml = charts\postgresql\Chart.yaml
+		charts\postgresql\values.yaml = charts\postgresql\values.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,5 +89,10 @@ Global
 		{B8F24627-2DD9-40B5-9E08-7C74FC16A895} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{FF9B864C-9D68-488E-A182-4A05AAA2C1DC} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{C1EC390F-F4B4-43C5-8214-3E3A2B698F53} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{A1F300DD-1B82-4C22-A1BD-BA3EE171937C} = {37E9690F-84BC-436B-B8B9-6B799B3EE2B2}
+		{37E9690F-84BC-436B-B8B9-6B799B3EE2B2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B1CD5A4A-93F5-406A-AE84-F0150E475429}
 	EndGlobalSection
 EndGlobal

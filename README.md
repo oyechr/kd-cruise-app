@@ -20,7 +20,7 @@ This POC is designed to test the feasibility of the application on one cruise sh
 
 
 ##Project Structure 
-
+````
 ├── .github/workflows/ # CI/CD pipeline (GitHub Actions)
 ├── charts/ # Helm charts for Kubernetes management
 │   └── postgresql/
@@ -43,7 +43,8 @@ This POC is designed to test the feasibility of the application on one cruise sh
 │   └── KD.Cruise.BlazorApp/ # Frontend - Blazor WebAssembly
 ├── tests/ # Unit/integration tests
 │   └── KD.Cruise.Tests/
-└── README.md
+└── README.md 
+````
 
 # Setup Instructions
 
@@ -100,7 +101,7 @@ cd kd-cruise
 
 1. From the `kubectl get pods` output, find the pod name, for example:
     ```
-    podname: my-postgres-postgresql-799c666cff-2rtfk
+    my-postgres-postgresql-799c666cff-2rtfk
     ```
 
 2. Execute the following command to enter the pod:
@@ -119,8 +120,7 @@ cd kd-cruise
     \dt
     ```
 5. To view the contents of the `planned_events_tab` table, run:
-    ```sql SELECT * FROM planned_events_tab;
-    ```
+    ```SELECT * FROM planned_events_tab;```
 
 ### Expected output:
 
