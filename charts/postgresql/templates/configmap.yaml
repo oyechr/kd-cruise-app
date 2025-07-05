@@ -4,4 +4,5 @@ metadata:
     name: '{{ include "postgresql.fullname" . }}-init-sql'
 data:
   init.sql: |
-    {{ .Values.primary.initdb.scripts.init.sql | nindent 4 }}
+    {{ index .Values.primary.initdb.scripts "init.sql" | nindent 4 }}
+

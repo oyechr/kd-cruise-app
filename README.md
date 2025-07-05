@@ -45,14 +45,101 @@ This POC is designed to test the feasibility of the application on one cruise sh
 │   └── KD.Cruise.Tests/
 └── README.md
 
-##Setup Instructions
+# Setup Instructions
 
-###Clone Repo
+### Prerequisites
+
+Before you begin, ensure you have the following tools installed and set up on your local machine:
+
+- **Git**: For cloning the repository.
+- **Kubernetes**: Make sure you have a working Kubernetes cluster (e.g., Minikube, GKE, EKS, AKS, etc.).
+- **Helm**: Helm should be installed to manage Kubernetes applications.
+- **kubectl**: The Kubernetes command-line tool for interacting with your cluster.
+- **psql**: A PostgreSQL client to interact with the database (should also be available via `kubectl exec`).
+
+### Clone the Repository
+
+To get started, clone the repository and navigate into the project directory:
 
 ```bash
 git clone https://github.com/oyechr/kd-cruise.git
 cd kd-cruise
 ```
+
+
+# PostgreSQL Setup with Helm and Kubernetes
+
+## Setup PostgreSQL with Helm:
+
+1. Navigate to the PostgreSQL chart directory:
+    ```bash
+    cd 'C:\Users\{username}\source\repos\kd-cruise-app\charts\postgresql'
+    ```
+
+2. Install PostgreSQL using Helm:
+    ```bash
+    helm install my-postgres .
+    ```
+
+3. To uninstall PostgreSQL:
+    ```bash
+    helm uninstall my-postgres
+    ```
+
+4. Check the status of the pods:
+    ```bash
+    kubectl get pods
+    ```
+
+5. Check the services in the cluster:
+    ```bash
+    kubectl get services
+    ```
+
+## Validate if the table exists:
+
+1. From the `kubectl get pods` output, find the pod name, for example:
+    ```
+    podname: my-postgres-postgresql-799c666cff-2rtfk
+    ```
+
+2. Execute the following command to enter the pod:
+    ```bash
+    kubectl exec -it <pod-name> -- bash
+    ```
+
+3. Connect to PostgreSQL:
+    ```bash
+    psql -U kdadmin -d kdcruise
+    ```
+
+
+4. To show the tables in PostgreSQL, execute:
+    ```bash
+    \dt
+    ```
+5. To view the contents of the `planned_events_tab` table, run:
+    ```sql SELECT * FROM planned_events_tab;
+    ```
+
+### Expected output:
+
+From 2) and 3) 
+![Pod and Connect](docs/images/pod-postgres-connect.png)
+
+From 4) and 5)
+ ![Table Contents](docs/images/postgres-table-contents.png)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
