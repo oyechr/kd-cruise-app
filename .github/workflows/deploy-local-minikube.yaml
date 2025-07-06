@@ -55,7 +55,7 @@ jobs:
         run: |
           helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
             -n monitoring \
-            -f monitoring/values.yaml
+            -f monitoring/prometheus-values.yaml
 
       - name: Update Helm dependencies for umbrella chart
         run: |
