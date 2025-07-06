@@ -22,8 +22,24 @@ prometheus:
       metrics_path: '/metrics'
       scheme: 'http'
 
-    - job_name: 'api'
+    - job_name: 'planned-event-api'
       static_configs:
         - targets: ['planned-events-api:80']  
       metrics_path: '/metrics'
       scheme: 'http'
+
+grafana:
+  enabled: true  
+
+  dashboards:
+    default:
+      custom-dashboard:
+        file: "dashboard.json"  
+        folder: "Custom Dashboards"  
+        datasource: "Prometheus"  
+
+  sidecar:
+    dashboards:
+      enabled: true  
+      label: grafana_dashboard
+      defaultDatasource: "Prometheus"

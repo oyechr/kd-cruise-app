@@ -106,6 +106,48 @@ The following steps have been tested and verified for local development:
 > The Makefile automates the deployment of Prometheus, Grafana, the API, and PostgreSQL.  
 > All steps were performed and verified in a local Minikube environment with the profile `kd-dev`
 
+### Accessing Grafana and Prometheus Dashboards Manually
+If you prefer or need to port-forward manually (for instance, if the Makefile commands don’t work as expected), you can do so with the following steps:
+
+1. Get Grafana Admin Password
+
+If the default password (`prom-operator`) does not work or you need to retrieve the password, run the following command to decode the Grafana admin password:
+For Linux/macOS or WSL:
+
+`kubectl --namespace monitoring get secrets prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 -d; echo`
+
+For Windows PowerShell:
+
+`kubectl -n monitoring get secret prometheus-grafana -o jsonpath="{.data.admin-password}" | % { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }`
+
+This will output the Grafana admin password.
+
+2. Get Grafana Admin Username
+
+You can also retrieve the username for Grafana if needed:
+
+For Linux/macOS or WSL:
+
+`kubectl --namespace monitoring get secrets prometheus-grafana -o jsonpath="{.data.admin-user}" | base64 -d; echo`
+
+For Windows PowerShell:
+
+`kubectl -n monitoring get secret prometheus-grafana -o jsonpath="{.data.admin-user}" | % { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }`
+
+3. Port-Forward Grafana
+
+To access the Grafana dashboard, run the following command to manually port-forward Grafana to localhost:3000:
+
+`kubectl -n monitoring port-forward svc/prometheus-kube-prometheus-stack-grafana 3000:80`
+
+This will make Grafana accessible at http://localhost:3000 in your browser. When prompted, use the admin username and the password retrieved from the previous step (or use the default prom-operator if that works).
+4. Port-Forward Prometheus
+
+To access the Prometheus dashboard, run the following command to manually port-forward Prometheus to localhost:9090:
+
+`kubectl -n monitoring port-forward svc/prometheus-kube-prometheus-prometheus 9090:9090`
+
+This will make Prometheus accessible at http://localhost:9090 in your browser.
 
 ### CI/CD with GitHub Actions
 

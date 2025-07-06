@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "planned-events-api.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "planned-events-api.name" . }}
+    app: {{ include "planned-events-api.name" . }}
     release: prometheus  
   annotations:
     prometheus.io/scrape: "true"

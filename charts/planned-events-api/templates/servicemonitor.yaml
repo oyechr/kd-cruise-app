@@ -7,7 +7,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "planned-events-api.name" . }}
+      app: {{ include "planned-events-api.name" . }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }} 
