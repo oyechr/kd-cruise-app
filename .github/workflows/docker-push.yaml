@@ -9,10 +9,6 @@ on:
       - "charts/**"
       - "monitoring/**"
       - ".github/workflows/docker-push.yaml"
-permissions:
-  packages: write
-  contents: read
-
 jobs:
   build-and-push:
     name: Build & Push API Image
