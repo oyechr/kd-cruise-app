@@ -1,6 +1,6 @@
-﻿# KD Cruise Ship App
+﻿# 🚢 KD Cruise Ship App
 
-## Description
+## 🧭 Overview
 KD Cruise Ship App is a proof-of-concept web application designed for managing planned events and live ship positions for luxury cruise ships. The project includes:
 -	A PostgreSQL database for storing planned events.
 -	Kubernetes-based deployment using Helm charts.
@@ -10,17 +10,21 @@ KD Cruise Ship App is a proof-of-concept web application designed for managing p
 This POC is designed to test the feasibility of the application on one cruise ship before scaling to the entire fleet.
 
 
-## Features 
+## ✨ Key Features (Current)
 
-- **Planned Events Management**: Store and retrieve planned events for voyages.
-- **PostgreSQL Database**: Robust database for event storage.
-- **Kubernetes Deployment**: Helm charts for managing Kubernetes resources.
-- **Monitoring**: Prometheus and Grafana for observability.
-- **CI/CD**: Automated build and deployment with GitHub Actions.
+- 📅 **Planned Events Management**: Store and retrieve planned events for voyages.
+- 🗄️ **PostgreSQL Database**: Robust database for event storage.
+- 🚀 **Kubernetes Deployment**: Helm charts for managing Kubernetes resources.
+- 📊 **Monitoring**: Prometheus and Grafana for observability.
+- ⚙️ **CI/CD**: Automated build and deployment with GitHub Actions.
+  
+> **Coming Soon:**
+> - 🎨 Blazor frontend (scaffolded, development not started)
+> - 🔁 GitOps with ArgoCD (infrastructure placeholders only)
 
 
 
-## Project Structure 
+## 📁 Project Structure 
 ````
 kd-cruise/
 ├── .github/
@@ -29,7 +33,6 @@ kd-cruise/
 │   ├── kd-cruise-/                     # Parent (umbrella) Helm chart for the full stack
 │   │   ├── Chart.yaml
 │   │   ├── values.yaml
-│   │   └── charts/                     # Populated by `helm dependency update`
 │   ├── planned-events-api/            # Helm chart for the ASP.NET Core API
 │   │   ├── Chart.yaml
 │   │   ├── values.yaml
@@ -40,7 +43,8 @@ kd-cruise/
 │       └── templates/
 ├── infrastructure/                     # ArgoCD manifests for GitOps-based deployments
 │   └── argocd/
-│       └── kd-postgres-application.yaml
+├── monitoring/                         # Monitoring configs and custom Prometheus values
+│   └── prometheus-values.yaml          # Custom values for Prometheus stack      └── kd-postgres-application.yaml
 ├── src/                                # Application source code
 │   ├── KD.Cruise.PlannedEventsApi/     # ASP.NET Core backend
 │   └── KD.Cruise.BlazorApp/            # Frontend - Blazor WebAssembly
@@ -50,9 +54,9 @@ kd-cruise/
 └── README.md                           # Project documentation and usage instructions
 ````
 
-## Setup Instructions
+## ⚙️ Setup Guide
 
-### Prerequisites
+### 🧰 Prerequisites
 
 Before you begin, ensure you have the following tools installed and set up on your local machine:
 
@@ -74,10 +78,33 @@ cd kd-cruise
 ```
 
 
+### 🧪 Local Development & Testing
 
-### Local Development and Deployment
+The following steps have been tested and verified for local development:
 
-You can use the provided `Makefile` to automate common tasks such as installing dependencies, deploying to Kubernetes, and managing Prometheus/Grafana:
+1. **Start Minikube**  
+   (using a named profile for isolation):
+	`` minikube start -p kd-dev``
+   
+2. **Deploy the stack using the Makefile**  
+   (run in Git Bash, WSL, or a compatible shell from the project root):
+   `make dev`
+	
+3. **Verify deployments and services:**
+	``kubectl get pods -A kubectl get svc -A``
+	
+4. **Access the API via Minikube service:**
+   ``minikube service planned-events-api``
+	
+   This will open the Swagger UI in your browser.
+
+5. **Test the API:**
+	   - Use the Swagger UI to call the `/v1/events` endpoint and confirm it returns planned events.
+	   - Test the `/healthz` endpoint to verify the API health.
+
+> **Note:**  
+> The Makefile automates the deployment of Prometheus, Grafana, the API, and PostgreSQL.  
+> All steps were performed and verified in a local Minikube environment with the profile `kd-dev`
 
 
 ### CI/CD with GitHub Actions

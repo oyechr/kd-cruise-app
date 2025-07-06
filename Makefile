@@ -5,7 +5,7 @@ STACK_NAME = kd-cruise
 CHART_PATH = charts/$(STACK_NAME)
 PROM_STACK_NAME = prometheus
 PROM_NAMESPACE = monitoring
-PROM_VALUES = monitoring/values.yaml  
+PROM_VALUES = monitoring/prometheus-values.yaml  
 
 setup-helm-repos:
 	@echo "🔗 Adding/updating Helm repos..."

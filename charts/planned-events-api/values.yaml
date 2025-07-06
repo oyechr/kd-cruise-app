@@ -8,7 +8,7 @@ service:
 replicaCount: 1
 
 database:
-  host: my-postgres-postgresql
+  host: kd-cruise-postgresql
   port: 5432
   name: kdcruise
   username: kdadmin

@@ -15,6 +15,10 @@ docker-compose.override.yml
 .dockerignore
 **/.env
 
+# Helm chart archives and dependencies
+*.tgz
+charts/*/charts/
+
 # Kubernetes
 *.yaml~
 *.yml~
