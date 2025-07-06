@@ -9,15 +9,15 @@ on:
     branches:
       - main
     paths:
-      - 'charts/**'
-      - 'monitoring/**'
-      - '.github/workflows/deploy-local-minikube.yaml'
+      - "charts/**"
+      - "monitoring/**"
+      - ".github/workflows/deploy-local-minikube.yaml"
   pull_request:
     branches:
       - main
     paths:
-      - 'charts/**'
-      - 'monitoring/**'
+      - "charts/**"
+      - "monitoring/**"
 
 jobs:
   deploy:
@@ -45,24 +45,25 @@ jobs:
         run: |
           kubectl get ns monitoring || kubectl create ns monitoring
 
-      - name: Add Prometheus Helm repo
+      - name: Add Prometheus and Grafana Helm repos
         run: |
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo update
-
-      - name: Update Helm dependencies for umbrella chart
-        run: helm dependency update charts/kd-cruise
-
-      - name: Install kd-cruise stack
-        run: |
-          helm upgrade --install kd-cruise charts/kd-cruise -n kd-cruise
 
       - name: Install Prometheus stack
         run: |
           helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
             -n monitoring \
             -f monitoring/values.yaml
+
+      - name: Update Helm dependencies for umbrella chart
+        run: |
+          helm dependency update charts/kd-cruise
+
+      - name: Install kd-cruise stack
+        run: |
+          helm upgrade --install kd-cruise charts/kd-cruise -n kd-cruise
 
       - name: Install Grafana
         run: |
