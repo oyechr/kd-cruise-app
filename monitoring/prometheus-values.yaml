@@ -1,0 +1,29 @@
+prometheus:
+  namespaceSelector:
+    matchNames:
+      - kd-cruise
+
+  rbac:
+    create: true
+  serviceAccount:
+    create: true
+
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: standard
+
+  scrapeInterval: 1m
+
+  additionalScrapeConfigs:
+    - job_name: 'postgresql'
+      static_configs:
+        - targets: ['postgresql:9187']  
+      metrics_path: '/metrics'
+      scheme: 'http'
+
+    - job_name: 'api'
+      static_configs:
+        - targets: ['planned-events-api:80']  
+      metrics_path: '/metrics'
+      scheme: 'http'

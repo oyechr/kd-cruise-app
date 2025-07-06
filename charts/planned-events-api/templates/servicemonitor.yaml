@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "planned-events-api.fullname" . }}
+  labels:
+    release: prometheus  
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "planned-events-api.name" . }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }} 
+  endpoints:
+    - port: metrics  
+      path: /metrics
+      interval: 1m
+      scrapeTimeout: 10s
+      scheme: http
+      honorLabels: true

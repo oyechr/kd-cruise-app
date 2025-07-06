@@ -25,7 +25,7 @@ kd-cruise/
 ├── .github/
 │   └── workflows/                      # CI/CD pipeline (GitHub Actions)
 ├── charts/                             # Helm charts for Kubernetes management
-│   ├── kd-cruise-stack/                # Parent (umbrella) Helm chart for the full stack
+│   ├── kd-cruise-/                     # Parent (umbrella) Helm chart for the full stack
 │   │   ├── Chart.yaml
 │   │   ├── values.yaml
 │   │   └── charts/                     # Populated by `helm dependency update`

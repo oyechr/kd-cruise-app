@@ -28,6 +28,13 @@ spec:
             - name: init-sql
               mountPath: /docker-entrypoint-initdb.d/
               readOnly: true
+        - name: postgres-exporter
+          image: quay.io/prometheuscommunity/postgres-exporter:v0.15.0
+          env:
+            - name: DATA_SOURCE_NAME
+              value: "postgresql://{{ .Values.auth.username }}:{{ .Values.auth.password }}@localhost:5432/{{ .Values.auth.database }}?sslmode=disable"
+          ports:
+            - containerPort: 9187
       volumes:
         - name: init-sql
           configMap:

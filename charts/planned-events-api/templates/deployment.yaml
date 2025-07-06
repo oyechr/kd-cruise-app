@@ -16,9 +16,22 @@ spec:
         - name: {{ include "planned-events-api.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
-            - containerPort: 80
+            - containerPort: 80  
+            - containerPort: 9187  
           env:
             - name: ASPNETCORE_URLS
               value: "http://+:80"
             - name: ConnectionStrings__Default
               value: "Host={{ .Values.database.host }};Port={{ .Values.database.port }};Database={{ .Values.database.name }};Username={{ .Values.database.username }};Password={{ .Values.database.password }}"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10

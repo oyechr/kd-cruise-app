@@ -6,6 +6,7 @@ using Prometheus;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddHealthChecks();
 builder.Services.AddApiVersioning(opt =>
 {
     opt.AssumeDefaultVersionWhenUnspecified = true;
@@ -42,5 +43,6 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty; 
 });
 
+app.MapHealthChecks("/healthz");
 app.MapControllers();
 app.Run();

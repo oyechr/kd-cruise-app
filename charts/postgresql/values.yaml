@@ -31,3 +31,10 @@ primary:
             ('7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b',123, 332, '2025-03-21 07:00:00', '2025-03-21 09:00:00', 'Early Bird Yoga'),
             ('8a9b0c1d-2e3f-4a5b-6c7d-8e9f0a1b2c3d',123, 332, '2025-03-21 19:00:00', '2025-03-21 21:00:00', 'Captains Dinner'),
             ('9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f',123, 332, '2025-03-22 10:00:00', '2025-03-22 12:00:00', 'Island Excursion');
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 1m
+    labels:
+      release: prometheus

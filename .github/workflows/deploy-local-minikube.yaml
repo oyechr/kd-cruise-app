@@ -1,20 +1,23 @@
 name: Deploy to Local Minikube
 
 on:
+  workflow_run:
+    workflows: ["Build and Push Docker Image"]
+    types:
+      - completed
   push:
     branches:
       - main
     paths:
-      - 'src/KD.Cruise.PlannedEventsApi/**'
-      - 'charts/my-postgres/**'
-      - 'charts/planned-events-api/**'
+      - 'charts/**'
+      - 'monitoring/**'
+      - '.github/workflows/deploy-local-minikube.yaml'
   pull_request:
     branches:
       - main
     paths:
-      - 'src/KD.Cruise.PlannedEventsApi/**'
-      - 'charts/my-postgres/**'
-      - 'charts/planned-events-api/**'
+      - 'charts/**'
+      - 'monitoring/**'
 
 jobs:
   deploy:
@@ -22,6 +25,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Minikube
         uses: medyagh/setup-minikube@v0.0.14
@@ -32,16 +37,47 @@ jobs:
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
 
-      - name: Create namespace
-        run: kubectl create namespace planned-events --dry-run=client -o yaml | kubectl apply -f -
-
-      - name: Deploy my-postgres
+      - name: Create kd-cruise namespace
         run: |
-          helm upgrade --install my-postgres ./charts/my-postgres --namespace planned-events
+          kubectl get ns kd-cruise || kubectl create ns kd-cruise
 
-      - name: Deploy planned-events-api
+      - name: Create monitoring namespace
         run: |
-          helm upgrade --install planned-events-api ./charts/planned-events-api \
-            --set image.repository=ghcr.io/oyechr/planned-events-api \
-            --set image.tag=latest \
-            --namespace planned-events
+          kubectl get ns monitoring || kubectl create ns monitoring
+
+      - name: Add Prometheus Helm repo
+        run: |
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo add grafana https://grafana.github.io/helm-charts
+          helm repo update
+
+      - name: Update Helm dependencies for umbrella chart
+        run: helm dependency update charts/kd-cruise
+
+      - name: Install kd-cruise stack
+        run: |
+          helm upgrade --install kd-cruise charts/kd-cruise -n kd-cruise
+
+      - name: Install Prometheus stack
+        run: |
+          helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
+            -n monitoring \
+            -f monitoring/values.yaml
+
+      - name: Install Grafana
+        run: |
+          helm upgrade --install grafana grafana/grafana -n monitoring
+
+      - name: Verify deployments
+        run: |
+          echo "KD Cruise Deployments:"
+          kubectl get pods -n kd-cruise
+          echo "Monitoring Deployments:"
+          kubectl get pods -n monitoring
+
+      - name: Verify services
+        run: |
+          echo "KD Cruise Services:"
+          kubectl get svc -n kd-cruise
+          echo "Monitoring Services:"
+          kubectl get svc -n monitoring
