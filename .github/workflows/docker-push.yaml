@@ -5,13 +5,13 @@ on:
     branches:
       - main
     paths:
-      - 'src/KD.Cruise.PlannedEventsApi/**'
-      - 'charts/**'
-      - 'monitoring/**'
-      - '.github/workflows/docker-push.yaml'
+      - "src/KD.Cruise.PlannedEventsApi/**"
+      - "charts/**"
+      - "monitoring/**"
+      - ".github/workflows/docker-push.yaml"
 permissions:
-  packages: write  
-  contents: read 
+  packages: write
+  contents: read
 
 jobs:
   build-and-push:
