@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
 using PlannedEventsApi.Data;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,7 @@ builder.Services.AddApiVersioning(opt =>
 });
 builder.Services.AddLogging();
 builder.Services.AddDbContext<PlannedEventsDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
@@ -31,11 +32,14 @@ var app = builder.Build();
 app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
 
+app.UseMetricServer();   
+app.UseHttpMetrics();   
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Planned Events API V1");
-    c.RoutePrefix = string.Empty; // Serve Swagger at the app's root
+    c.RoutePrefix = string.Empty; 
 });
 
 app.MapControllers();

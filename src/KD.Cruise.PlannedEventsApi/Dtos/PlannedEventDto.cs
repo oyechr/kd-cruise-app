@@ -7,12 +7,10 @@ public class PlannedEventDto
     public Guid Id { get; set; }
 
     [Required]
-    [StringLength(50)]
-    public string VoyageId { get; set; } = null!;
+    public int VoyageId { get; set; } 
 
     [Required]
-    [StringLength(50)]
-    public string VesselId { get; set; } = null!;
+    public int VesselId { get; set; }
 
     [Required]
     public DateTime FromUtc { get; set; }

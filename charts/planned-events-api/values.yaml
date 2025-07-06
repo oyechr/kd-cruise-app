@@ -1,0 +1,15 @@
+image:
+  repository: ghcr.io/oyechr/planned-events-api
+  tag: latest
+service:
+  type: LoadBalancer
+  port: 80
+
+replicaCount: 1
+
+database:
+  host: my-postgres-postgresql
+  port: 5432
+  name: kdcruise
+  username: kdadmin
+  password: kdpass

@@ -1,0 +1,47 @@
+name: Deploy to Local Minikube
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/KD.Cruise.PlannedEventsApi/**'
+      - 'charts/my-postgres/**'
+      - 'charts/planned-events-api/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/KD.Cruise.PlannedEventsApi/**'
+      - 'charts/my-postgres/**'
+      - 'charts/planned-events-api/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Minikube
+        uses: medyagh/setup-minikube@v0.0.14
+
+      - name: Start Minikube
+        run: minikube start --driver=docker
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Create namespace
+        run: kubectl create namespace planned-events --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy my-postgres
+        run: |
+          helm upgrade --install my-postgres ./charts/my-postgres --namespace planned-events
+
+      - name: Deploy planned-events-api
+        run: |
+          helm upgrade --install planned-events-api ./charts/planned-events-api \
+            --set image.repository=ghcr.io/oyechr/planned-events-api \
+            --set image.tag=latest \
+            --namespace planned-events

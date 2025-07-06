@@ -35,6 +35,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postgresql", "postgresql", 
 		charts\postgresql\values.yaml = charts\postgresql\values.yaml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "planned-events-api", "planned-events-api", "{AE6972C1-6C16-4EC0-BAA9-E8C07A71AED2}"
+	ProjectSection(SolutionItems) = preProject
+		charts\planned-events-api\Chart.yaml = charts\planned-events-api\Chart.yaml
+		charts\planned-events-api\values.yaml = charts\planned-events-api\values.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{6C849CD0-1902-4DC1-9574-1FC8C5C95911}"
+	ProjectSection(SolutionItems) = preProject
+		charts\planned-events-api\templates\deployment.yaml = charts\planned-events-api\templates\deployment.yaml
+		charts\planned-events-api\templates\service.yaml = charts\planned-events-api\templates\service.yaml
+		charts\planned-events-api\templates\_helpers.tpl = charts\planned-events-api\templates\_helpers.tpl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kd-cruise-stack", "kd-cruise-stack", "{959BA28F-0B41-4E2A-AEE2-500A3D9267DE}"
+	ProjectSection(SolutionItems) = preProject
+		Chart.yaml = Chart.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +109,9 @@ Global
 		{C1EC390F-F4B4-43C5-8214-3E3A2B698F53} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{A1F300DD-1B82-4C22-A1BD-BA3EE171937C} = {37E9690F-84BC-436B-B8B9-6B799B3EE2B2}
 		{37E9690F-84BC-436B-B8B9-6B799B3EE2B2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{AE6972C1-6C16-4EC0-BAA9-E8C07A71AED2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{6C849CD0-1902-4DC1-9574-1FC8C5C95911} = {AE6972C1-6C16-4EC0-BAA9-E8C07A71AED2}
+		{959BA28F-0B41-4E2A-AEE2-500A3D9267DE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1CD5A4A-93F5-406A-AE84-F0150E475429}
