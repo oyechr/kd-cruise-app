@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: planned-events-api-rules
+  namespace: monitoring
+  labels:
+    release: prometheus  
+spec:
+  groups:
+    - name: planned-events.rules
+      rules:
+        - alert: PlannedEventsAPIDown
+          expr: absent(up{job="planned-events-api"})
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Planned Events API is down"
+            description: "The /metrics endpoint is unreachable."
