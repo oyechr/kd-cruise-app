@@ -31,3 +31,5 @@ Thumbs.db
 .idea/
 node_modules/
 dist/
+/.prometheus.pid
+/.grafana.pid

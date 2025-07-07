@@ -4,8 +4,9 @@
 KD Cruise Ship App is a proof-of-concept web application designed for managing planned events and live ship positions for luxury cruise ships. The project includes:
 -	A PostgreSQL database for storing planned events.
 -	Kubernetes-based deployment using Helm charts.
--	GitOps automation with ArgoCD.
--	Docker Compose setup for local development.
+-   API for planned events management (currently facing Prometheus target visibility issue).
+-   Prometheus and Grafana for observability and monitoring of system metrics.
+
 
 This POC is designed to test the feasibility of the application on one cruise ship before scaling to the entire fleet.
 
@@ -80,7 +81,7 @@ cd kd-cruise
 
 ### 🧪 Local Development & Testing
 
-The following steps have been tested and verified for local development:
+The following steps have been tested and verified for local development (`Commit 1d2e434`):
 
 1. **Start Minikube**  
    (using a named profile for isolation):
@@ -102,12 +103,22 @@ The following steps have been tested and verified for local development:
 	   - Use the Swagger UI to call the `/v1/events` endpoint and confirm it returns planned events.
 	   - Test the `/healthz` endpoint to verify the API health.
 
+6. **Prometheus & Grafana Setup:**
+
+    Both services confirmed to be running after deployment.
+
+7. **Access Grafana Dashboard:**
+
+    PostgreSQL metrics are fully functional and displayed in Grafana.
+    API metrics row is pre-configured and will populate once Prometheus detects the API as a valid scrape target.
+
 > **Note:**  
 > The Makefile automates the deployment of Prometheus, Grafana, the API, and PostgreSQL.  
+> The port forwading is not correctly handled by the Makefile, so you may need to port-forward manually as described below.
 > All steps were performed and verified in a local Minikube environment with the profile `kd-dev`
 
 ### Accessing Grafana and Prometheus Dashboards Manually
-If you prefer or need to port-forward manually (for instance, if the Makefile commands don’t work as expected), you can do so with the following steps:
+If you prefer or need to port-forward manually (Makefile commands don’t work as expected), you can do so with the following steps:
 
 1. Get Grafana Admin Password
 
@@ -141,6 +152,7 @@ To access the Grafana dashboard, run the following command to manually port-forw
 `kubectl -n monitoring port-forward svc/prometheus-kube-prometheus-stack-grafana 3000:80`
 
 This will make Grafana accessible at http://localhost:3000 in your browser. When prompted, use the admin username and the password retrieved from the previous step (or use the default prom-operator if that works).
+
 4. Port-Forward Prometheus
 
 To access the Prometheus dashboard, run the following command to manually port-forward Prometheus to localhost:9090:
@@ -149,7 +161,7 @@ To access the Prometheus dashboard, run the following command to manually port-f
 
 This will make Prometheus accessible at http://localhost:9090 in your browser.
 
-### CI/CD with GitHub Actions
+### ⚙️ CI/CD with GitHub Actions
 
 This repository uses GitHub Actions for automated builds and deployments:
 
@@ -167,20 +179,90 @@ This repository uses GitHub Actions for automated builds and deployments:
   - Installs the API and PostgreSQL in the `kd-cruise` namespace.
   - Verifies deployments and services.
 
-### Monitoring
+### 📊 Monitoring
 
 - **Prometheus and Grafana** are deployed via Helm using custom values from `monitoring/values.yaml`.
 - The API exposes metrics at `/metrics` for Prometheus scraping.
 - Kubernetes Service and Deployment annotations are set for Prometheus discovery.
 
 
-## Decisions Taken
+##  🧠 Decisions Taken
+This project was all about building a working Kubernetes-deployed app while also learning the nuts and bolts behind the scenes. 
+Here's a quick breakdown of the decisions I made along the way, why I made them, and what worked (and didn’t).
+
+### 🗃️ Database (PostgreSQL)
+
+Made my own minimal Helm chart instead of using something like Bitnami. 
+The idea was to get a better understanding of how the pieces fit together without being overwhelmed by boilerplate I didn’t understand.
+
+### ⚙️ API (ASP.NET Core)
+
+The API is built in .NET 9 using ASP.NET Core and Swagger/OpenAPI annotations. 
+Familiar stack for me, and Swagger makes it super easy to test endpoints and hand off clean documentation to others. The annotations kept things tidy.
 
 
+### ☸️ Deployment (Kubernetes + Helm)
+
+Started small — wrote basic Helm charts for the API and DB to learn how things work. Later grouped them into a parent chart for easier management. 
+For Prometheus, I used the community Helm chart to get Grafana and exporters included — less reinventing, more observing.
+
+### 🔐 Namespaces
+
+Prometheus runs in its own namespace, separate from the app. 
+This is mostly to follow best practices — it keeps monitoring stuff isolated, makes RBAC cleaner, and avoids clashing with app resources.
+
+### 🤖 GitHub Actions
+
+Set up CI to build, tag, and push the API container to GHCR. 
+It also runs a quick Kubernetes deployment test to make sure commands work outside my local setup. Keeps things clean and reproducible.
 
 
+### 📈 Observability (Prometheus + Grafana)
 
-## Planned Improvements
+Got Prometheus and Grafana running, metrics from PostgreSQL looked good. But… I hit a wall with getting API metrics to show up. 
+Locally, the /metrics endpoint worked fine, logs looked clean, but Prometheus just wouldn’t see the target.
+Tried debugging this for way too long, and it ended up stalling progress on other parts.
+
+### 🧪 Testing / 
+
+I scaffolded a test project early on, even though it was out of scope. Felt like a good investment for future dev and just good habit.
+
+ ### 🖥️ UI (Blazor Web App – Razor Components)
+
+Even though it was out of scope, a Blazor WebAssembly app was scaffolded early on as a placeholder for the future UI.
+
+The decision to use Razor components was driven by a desire to stay within the C#/.NET ecosystem and ensure a cohesive full-stack development experience.
+
+Keeping everything in the same language and framework:
+
+   - Reduces cognitive overhead when switching between frontend and backend.
+
+   -  Makes it easier to reuse DTOs, validation logic, and authentication strategies.
+
+   -  Lays a clean foundation for building interactive dashboards or admin panels later using C# without jumping to JavaScript-heavy stacks.
+
+
+### 🛠️ Developer Experience
+
+Wrote a Makefile to speed up local setup and testing — didn’t want to live in the terminal too much.
+Also figured it would be helpful for anyone else jumping in.
+
+### 🛑 What Didn’t Go So Well
+
+Got a bit stuck trying to fix the missing API metrics. Also got sidetracked trying to automate port-forwarding in the Makefile, and briefly dipped into Prometheus alerting/webhooks for Task 4. 
+Decided to pull back and focus on finishing what I could properly instead of half-starting new problems.
+
+## 🔭 Looking Ahead
+
+Resolving Prometheus scrape target for the API.
+
+Implementing Prometheus-based alerts and routing them via webhooks.
+
+Wiring up the Blazor app to consume the planned events API.
+
+Adding authentication via ASP.NET Identity or external providers.
+
+Expanding monitoring to include logging via Loki or distributed tracing
 
 
 
